@@ -1,5 +1,5 @@
 import type { LinksFunction } from '@remix-run/node';
-import { Links, LiveReload, Outlet, Scripts } from '@remix-run/react';
+import { Links, LiveReload, Outlet } from '@remix-run/react';
 
 import globalStylesUrl from './styles/global.css';
 import globalMediumStylesUrl from './styles/global-medium.css';
@@ -24,18 +24,23 @@ export const links: LinksFunction = () => {
   ];
 };
 
-function Document({ children }) {
+function Document({
+  children,
+  title = `Remix: So great, it's funny!`
+}: {
+  children: React.ReactNode;
+  title?: string;
+}) {
   return (
     <html lang="en">
       <head>
         <meta charSet="utf-8" />
-        <title>MyRemixWebSite</title>
+        <title>{title}</title>
         <Links />
       </head>
       <body>
         {children}
         <LiveReload />
-        <Scripts />
       </body>
     </html>
   );
@@ -51,9 +56,11 @@ export default function App() {
 
 export function ErrorBoundary({ error }: { error: Error }) {
   return (
-    <div className="error-container">
-      <h1>Something went wrong</h1>
-      <p>{error.message}</p>
-    </div>
+    <Document title="Uh-oh!">
+      <div className="error-container">
+        <h1>App Error</h1>
+        <pre>{error.message}</pre>
+      </div>
+    </Document>
   );
 }
